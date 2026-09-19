@@ -36,3 +36,12 @@ export interface ToastMsg {
   description?: string;
   type: 'success' | 'info' | 'warning' | 'error';
 }
+
+export interface UserProfile {
+  name: string;
+  email: string;
+  role: string;
+  bio: string;
+  university: string;
+  avatarColor: string;
+}

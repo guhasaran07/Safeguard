@@ -2,17 +2,18 @@ import { useState } from 'react';
 import { User, Target, Bell, Palette, Timer, Trash2, Moon, Sun, Save } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import Modal from '@/components/Modal';
+import EditProfileModal from '@/components/EditProfileModal';
 
 export default function Settings() {
   const {
     theme, toggleTheme, dailyGoalMin, setDailyGoalMin, resetStats, pushToast,
+    profile, setProfile,
   } = useApp();
 
-  const [name, setName] = useState('Alex Rivera');
-  const [email, setEmail] = useState('alex.rivera@college.edu');
   const [notif, setNotif] = useState({ sessionEnd: true, distractions: true, dailyReport: false, streaks: true });
   const [prefs, setPrefs] = useState({ defaultFocus: 25, defaultBreak: 5, autoStartBreak: false, sound: true });
   const [resetOpen, setResetOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
 
   const handleSave = () => pushToast({ title: 'Settings saved', type: 'success' });
 
@@ -47,26 +48,33 @@ export default function Settings() {
       {/* Profile */}
       <div className="card p-6">
         <div className="flex items-center gap-2 mb-4">
-          <User className="w-5 h-5 text-muted" />
+          <div className={`w-5 h-5 rounded-full bg-gradient-to-br ${profile.avatarColor}`} />
           <h2 className="font-bold">Profile</h2>
         </div>
         <div className="flex items-center gap-4 mb-6">
-          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white font-bold text-xl">
-            {name.split(' ').map((n) => n[0]).join('')}
+          <div className={`w-16 h-16 rounded-full bg-gradient-to-br ${profile.avatarColor} flex items-center justify-center text-white font-bold text-xl`}>
+            {profile.name.split(' ').map((n) => n[0]).join('').slice(0, 2)}
           </div>
-          <div>
-            <p className="font-semibold">{name}</p>
-            <p className="text-sm text-muted">Student · 5-day streak</p>
+          <div className="flex-1">
+            <p className="font-semibold">{profile.name}</p>
+            <p className="text-sm text-muted">{profile.role} · {profile.university}</p>
+            <p className="text-xs text-muted mt-1">{profile.bio}</p>
           </div>
+          <button
+            onClick={() => setEditOpen(true)}
+            className="btn-ghost px-4 py-2 text-sm"
+          >
+            Edit
+          </button>
         </div>
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
             <label className="text-sm text-muted">Name</label>
-            <input value={name} onChange={(e) => setName(e.target.value)} className="w-full mt-1 px-4 py-2.5 rounded-xl bg-[rgb(var(--bg))] border text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
+            <input value={profile.name} readOnly className="w-full mt-1 px-4 py-2.5 rounded-xl bg-[rgb(var(--bg))] border text-sm opacity-70" />
           </div>
           <div>
             <label className="text-sm text-muted">Email</label>
-            <input value={email} onChange={(e) => setEmail(e.target.value)} className="w-full mt-1 px-4 py-2.5 rounded-xl bg-[rgb(var(--bg))] border text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
+            <input value={profile.email} readOnly className="w-full mt-1 px-4 py-2.5 rounded-xl bg-[rgb(var(--bg))] border text-sm opacity-70" />
           </div>
         </div>
       </div>
@@ -192,6 +200,8 @@ export default function Settings() {
           This will permanently clear all your focus sessions, history, and blocking settings. This cannot be undone.
         </p>
       </Modal>
+
+      <EditProfileModal open={editOpen} onClose={() => setEditOpen(false)} />
     </div>
   );
 }

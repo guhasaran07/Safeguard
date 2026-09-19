@@ -1,5 +1,6 @@
 import { Menu, Sun, Moon, Bell, Home } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
+import ProfileMenu from '@/components/ProfileMenu';
 
 export default function TopBar({ onMenu }: { onMenu: () => void }) {
   const { theme, toggleTheme, setPage, pushToast } = useApp();
@@ -34,9 +35,7 @@ export default function TopBar({ onMenu }: { onMenu: () => void }) {
         >
           {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
         </button>
-        <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white font-semibold text-sm">
-          AR
-        </div>
+        <ProfileMenu />
       </div>
     </header>
   );

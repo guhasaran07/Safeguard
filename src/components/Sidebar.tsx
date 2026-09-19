@@ -1,4 +1,4 @@
-import { ShieldCheck, LayoutDashboard, Timer, BarChart3, Ban, Bot, History, Settings, User, X } from 'lucide-react';
+import { ShieldCheck, LayoutDashboard, Timer, BarChart3, Ban, Bot, History, Settings, X } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import type { Page } from '@/types';
 
@@ -13,12 +13,14 @@ const items: { id: Page; label: string; icon: typeof LayoutDashboard }[] = [
 ];
 
 export default function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const { page, setPage } = useApp();
+  const { page, setPage, profile } = useApp();
 
   const go = (p: Page) => {
     setPage(p);
     onClose();
   };
+
+  const initials = profile.name.split(' ').map((n) => n[0]).join('').slice(0, 2);
 
   return (
     <>
@@ -73,12 +75,12 @@ export default function Sidebar({ open, onClose }: { open: boolean; onClose: () 
                 : 'text-muted hover:bg-black/5 dark:hover:bg-white/5'
             }`}
           >
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white">
-              <User className="w-4 h-4" />
+            <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${profile.avatarColor} flex items-center justify-center text-white`}>
+              {initials}
             </div>
             <div className="text-left">
-              <div className="text-sm font-semibold">Alex Rivera</div>
-              <div className="text-xs text-muted">Student</div>
+              <div className="text-sm font-semibold">{profile.name}</div>
+              <div className="text-xs text-muted">{profile.role}</div>
             </div>
           </button>
         </div>

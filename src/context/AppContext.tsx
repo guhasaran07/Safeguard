@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
-import type { Page, Theme, AppToggle, FocusSessionRecord, ToastMsg } from '@/types';
+import type { Page, Theme, AppToggle, FocusSessionRecord, ToastMsg, UserProfile } from '@/types';
 import { initialAppToggles, initialHistory } from '@/data/mockData';
 
 interface AppState {
@@ -25,6 +25,9 @@ interface AppState {
 
   dailyGoalMin: number;
   setDailyGoalMin: (n: number) => void;
+
+  profile: UserProfile;
+  setProfile: (p: UserProfile) => void;
 }
 
 const Ctx = createContext<AppState | null>(null);
@@ -37,6 +40,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [history, setHistory] = useState<FocusSessionRecord[]>(initialHistory);
   const [toasts, setToasts] = useState<ToastMsg[]>([]);
   const [dailyGoalMin, setDailyGoalMin] = useState(240);
+  const [profile, setProfile] = useState<UserProfile>({
+    name: 'Alex Rivera',
+    email: 'alex.rivera@college.edu',
+    role: 'Student',
+    bio: 'Computer Science student passionate about building better study habits.',
+    university: 'Stanford University',
+    avatarColor: 'from-primary to-accent',
+  });
 
   useEffect(() => {
     if (theme === 'dark') document.documentElement.classList.add('dark');
@@ -88,6 +99,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
         dismissToast,
         dailyGoalMin,
         setDailyGoalMin,
+        profile,
+        setProfile,
       }}
     >
       {children}
